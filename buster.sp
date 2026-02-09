@@ -2,13 +2,13 @@
 // betherobot.inc (https://forums.alliedmods.net/attachment.php?attachmentid=113505&d=1356209096)
 // sdkhooks.inc (https://www.sourcemod.net/new-api/sdkhooks/__raw)
 // sdktools_functions (https://www.sourcemod.net/new-api/sdktools_functions/__raw)
+
 #pragma semicolon 1
 #include <sourcemod>
+#include <betherobot>
 #include <tf2_stocks>
 #include <sdkhooks>
-#include <betherobot>
 #include <sdktools_functions>
-
 #define PLUGIN_VERSION "1.3"
 public Plugin:myinfo = 
 {
@@ -28,6 +28,8 @@ enum BusterStatus {
 new BusterStatus:Status[MAXPLAYERS + 1];
 new bool:AboutToExplode[MAXPLAYERS + 1];
 new Float:LastBusterTime; // Not for each player.
+
+new bool:GlobalToggle;
 
 new Handle:cvarFootsteps, Handle:cvarWearables, Handle:cvarBusterAnnounce, Handle:cvarWearablesKill;
 new Handle:cvarFF, Handle:cvarBossScale;
@@ -154,7 +156,19 @@ stock bool:ToggleBuster(client, bool:toggle = bool:2)
 	}
 	if (toggle == true || (toggle == bool:2 && Status[client] == BusterStatus_Human))
 	{
-		if (TF2_GetPlayerClass(client) != TFClass_DemoMan) TF2_SetPlayerClass(client, TFClass_DemoMan);
+	    GlobalToggle = true;
+		if (TF2_GetPlayerClass(client) != TFClass_DemoMan)
+		{
+		       toggle = false;
+		       GlobalToggle = false;
+		       ForcePlayerSuicide(client, false);
+		       PrintToChat(client, "[SM] You need to be Demoman to trigger this!");
+		       return Plugin_Handled;
+		}
+		else
+		{
+		    TF2_SetPlayerClass(client, TFClass_DemoMan); // does this really matter? i hope so
+		}
 		TF2_RemoveWeaponSlot(client, 0); // remove primary
 		TF2_RemoveWeaponSlot(client, 1); // remove secondary
 		TF2_RemoveWeaponSlot(client, 3); // remove pda/disguisekit
@@ -223,9 +237,19 @@ public Action:Listener_taunt(client, const String:command[], args)
 {
 	if (Status[client] == BusterStatus_Buster)
 	{
+	    if ((TF2_GetPlayerClass(client) != TFClass_DemoMan) & GlobalToggle == true)
+		{
+		       Status[client] = BusterStatus_Human;
+		       ForcePlayerSuicide(client, false);
+		       PrintToChat(client, "[SM] Invalid class detected for Sentry Buster!");
+		       return Plugin_Handled;
+		}
+		else
+		{
 		if (AboutToExplode[client]) return Plugin_Continue;
 		if (GetEntProp(client, Prop_Send, "m_hGroundEntity") == -1) return Plugin_Continue;
 		GetReadyToExplode(client);
+		}
 	}
 	return Plugin_Continue;
 }
@@ -233,12 +257,27 @@ public Action:Listener_taunt(client, const String:command[], args)
 public Action:Event_Inventory(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	StopSound(client, SNDCHAN_AUTO, "mvm/sentrybuster/mvm_sentrybuster_loop.wav");
+	if ((TF2_GetPlayerClass(client) != TFClass_DemoMan) & GlobalToggle == true)
+		{
+		    Status[client] = BusterStatus_Human;
+		    StopSound(client, SNDCHAN_AUTO, "mvm/sentrybuster/mvm_sentrybuster_loop.wav");
+		    ForcePlayerSuicide(client, false);
+		    GlobalToggle = false;
+		    return Plugin_Handled;
+		}
+	else
 	if (Status[client] == BusterStatus_WantsToBeBuster) ToggleBuster(client, true);
+	return Plugin_Handled;
 }
 
 public Action:Event_Death(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	new client = GetClientOfUserId(GetEventInt(event, "userid"));
+	if (TF2_GetPlayerClass(client) != TFClass_DemoMan)
+		{
+		    ForcePlayerSuicide(client, false);
+		}
 	if (GetEventInt(event, "death_flags") & TF_DEATHFLAG_DEADRINGER) return;
 	if (Status[client] == BusterStatus_Buster)
 	{
@@ -283,6 +322,7 @@ public Action:Timer_UnBuster(Handle:timer, any:uid)
 	new client = GetClientOfUserId(uid);
 	if (!IsValidClient(client)) return;
 	ToggleBuster(client, false);
+	ForcePlayerSuicide(client, false);
 }
 
 public Action:SoundHook(clients[64], &numClients, String:sound[PLATFORM_MAX_PATH], &Ent, &channel, &Float:volume, &level, &pitch, &flags)
