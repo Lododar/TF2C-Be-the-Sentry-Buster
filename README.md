@@ -30,7 +30,7 @@ Thirdperson will NOT be enabled when enabling Sentry Buster, (trust me, I tried 
 
 ### Known bugs / issues
 
-- When forcing a respawn, such as after the Waiting for Players transition. The target(s) will be stuck as the Sentry Buster but with the default player size.
+- Forcing a respawn while a target is a Sentry Buster, such as after the Waiting for Players transition. The target(s) will be stuck as the Sentry Buster but with the default player size.
 
       Fix: Killbind or taunt/detonate while in the bugged state
 
