@@ -26,7 +26,7 @@ Thirdperson will NOT be enabled when enabling Sentry Buster, (trust me, I tried 
 |---------|-------|-------------|
 | sm_betherobot_buster_announce | 0-3 | Who should hear announcer on Sentry Buster spawn? 0 = No one, 1 = Enemy Team, 2 = Sentry Buster's team, 3 = Both Teams |
 | sm_buster / sm_sentrybuster | `<target>`/ `@all`/ `@blue` / `@red`| Enable Sentry Buster |
-| bethebuster_admin | `<target>`/ `@all`/ `@blue` / `@red`  | Admin command for enabling Sentry Buster |
+| sm_bethebuster_admin | `<target>`/ `@all`/ `@blue` / `@red`  | Admin command for enabling Sentry Buster |
 
 ### Known bugs / issues
 
