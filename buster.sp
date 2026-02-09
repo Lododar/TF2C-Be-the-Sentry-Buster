@@ -2,8 +2,6 @@
 // tf2.inc  (https://sm.alliedmods.net/new-api/tf2/__raw)
 // betherobot.inc (https://forums.alliedmods.net/attachment.php?attachmentid=113505&d=1356209096)
 
-// This uses code from DarthNinja's [TF2] Third Person (Non-sv_cheats Edition) plugin '(https://forums.alliedmods.net/showthread.php?p=1694178)
-
 #pragma semicolon 1
 #include <sourcemod>
 #include <tf2_stocks>
