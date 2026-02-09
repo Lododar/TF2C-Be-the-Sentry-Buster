@@ -1,7 +1,7 @@
 // Requires
-// tf2.inc  (https://sm.alliedmods.net/new-api/tf2/__raw)
 // betherobot.inc (https://forums.alliedmods.net/attachment.php?attachmentid=113505&d=1356209096)
-
+// sdkhooks.inc (https://www.sourcemod.net/new-api/sdkhooks/__raw)
+// sdktools_functions (https://www.sourcemod.net/new-api/sdktools_functions/__raw)
 #pragma semicolon 1
 #include <sourcemod>
 #include <tf2_stocks>
