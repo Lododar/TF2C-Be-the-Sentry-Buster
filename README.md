@@ -27,13 +27,3 @@ Thirdperson will NOT be enabled when enabling Sentry Buster, (trust me, I tried 
 | sm_betherobot_buster_announce | 0-3 | Who should hear announcer on Sentry Buster spawn? 0 = No one, 1 = Enemy Team, 2 = Sentry Buster's team, 3 = Both Teams |
 | sm_buster / sm_sentrybuster | `<target>`/ `@all`/ `@blue` / `@red`| Enable Sentry Buster |
 | sm_bethebuster_admin | `<target>`/ `@all`/ `@blue` / `@red`  | Admin command for enabling Sentry Buster |
-
-### Known bugs / issues
-
-- Forcing a respawn while a target is a Sentry Buster, such as after the Waiting for Players transition. The target(s) will be stuck as the Sentry Buster but with the default player size.
-
-      Fix: Killbind or taunt/detonate while in the bugged state
-
-- 'mvm_sentrybuster_loop.wav' has the tendancy to linger after detonation or death.
-
-       Fix: Temporarily enable sentry buster mode on the target and have them be killed.
