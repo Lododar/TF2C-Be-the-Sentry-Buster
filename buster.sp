@@ -9,7 +9,7 @@
 #include <tf2_stocks>
 #include <sdkhooks>
 #include <sdktools_functions>
-#define PLUGIN_VERSION "1.3"
+#define PLUGIN_VERSION "1.0.1"
 public Plugin:myinfo = 
 {
 	name = "Be the Robot: Sentry Buster TF2:C Compatibility",
@@ -161,7 +161,7 @@ stock bool:ToggleBuster(client, bool:toggle = bool:2)
 		{
 		       toggle = false;
 		       GlobalToggle = false;
-		       ForcePlayerSuicide(client, false);
+		       //ForcePlayerSuicide(client, false);
 		       PrintToChat(client, "[SM] You need to be Demoman to trigger this!");
 		       return Plugin_Handled;
 		}
@@ -240,7 +240,7 @@ public Action:Listener_taunt(client, const String:command[], args)
 	    if ((TF2_GetPlayerClass(client) != TFClass_DemoMan) & GlobalToggle == true)
 		{
 		       Status[client] = BusterStatus_Human;
-		       ForcePlayerSuicide(client, false);
+		       //ForcePlayerSuicide(client, false); // no!
 		       PrintToChat(client, "[SM] Invalid class detected for Sentry Buster!");
 		       return Plugin_Handled;
 		}
@@ -276,7 +276,7 @@ public Action:Event_Death(Handle:event, const String:name[], bool:dontBroadcast)
 	new client = GetClientOfUserId(GetEventInt(event, "userid"));
 	if (TF2_GetPlayerClass(client) != TFClass_DemoMan)
 		{
-		    ForcePlayerSuicide(client, false);
+		    //ForcePlayerSuicide(client, false);
 		}
 	if (GetEventInt(event, "death_flags") & TF_DEATHFLAG_DEADRINGER) return;
 	if (Status[client] == BusterStatus_Buster)
